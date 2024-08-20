@@ -2,6 +2,9 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      barlow: ['Barlow Semi Condensed', 'sans-serif'],
+    },
     extend: {
       backgroundImage: {
         'background-radial-gradient':
@@ -16,6 +19,11 @@ export default {
           'linear-gradient(to bottom, hsl(261, 73%, 60%), hsl(261, 72%, 63%))',
         'cyan-gradient':
           'linear-gradient(to bottom, hsl(189, 59%, 53%), hsl(189, 58%, 57%))',
+      },
+      colors: {
+        'text-dark': 'hsl(229, 25%, 31%)',
+        'text-score': 'hsl(229, 64%, 46%)',
+        'header-outline': 'hsl(217, 16%, 45%)',
       },
     },
   },
