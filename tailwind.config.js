@@ -19,6 +19,7 @@ export default {
           'linear-gradient(to bottom, hsl(261, 73%, 60%), hsl(261, 72%, 63%))',
         'cyan-gradient':
           'linear-gradient(to bottom, hsl(189, 59%, 53%), hsl(189, 58%, 57%))',
+        'bg-triangle': 'url(/bg-triangle.svg)',
       },
       colors: {
         'text-dark': 'hsl(229, 25%, 31%)',
