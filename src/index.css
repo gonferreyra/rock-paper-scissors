@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .shadow-blue {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 1); /* Aro azul */
+  }
+  .shadow-yellow {
+    box-shadow: 0 0 0 10px rgba(234, 179, 8, 1); /* Aro amarillo */
+  }
+  .shadow-red {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 1); /* Aro rojo */
+  }
+}
