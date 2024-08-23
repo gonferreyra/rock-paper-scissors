@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useState } from 'react';
+import Rules from './components/Rules';
 
 const choices = ['rock', 'paper', 'scissors'];
 
@@ -8,6 +9,7 @@ function App() {
   const [computerPick, setComputerPick] = useState<string>('');
   const [results, setResults] = useState<'You win!' | 'You lose!' | 'Tie'>();
   const [showComputerPick, setShowComputerPick] = useState<boolean>(false);
+  const [isRulesOpen, setIsRulesOpen] = useState(false);
 
   function handleSelectedPick(pick: string) {
     setSelectedPick(pick);
@@ -15,6 +17,10 @@ function App() {
 
   function handleComputerPick() {
     setComputerPick(choices[Math.floor(Math.random() * choices.length)]);
+  }
+
+  function handleRulesModal() {
+    setIsRulesOpen(!isRulesOpen);
   }
 
   function startGame(pick: string) {
@@ -49,7 +55,7 @@ function App() {
   }
 
   return (
-    <div className="box-border w-full bg-background-radial-gradient p-6 font-barlow font-semibold uppercase text-white">
+    <div className="box-border min-h-screen w-full bg-background-radial-gradient p-6 font-barlow font-semibold uppercase text-white">
       <header className="flex items-center justify-between rounded-md border-4 border-header-outline p-6 lg:m-auto lg:max-w-screen-sm">
         <div className="">
           <img src="/logo.svg" alt="rockpaperscissors-logo" className="h-16" />
@@ -60,7 +66,7 @@ function App() {
         </div>
       </header>
 
-      <main className="relative mx-auto flex min-h-[80vh] max-w-[500px] flex-col items-center justify-center lg:max-w-screen-sm">
+      <main className="relative mx-auto flex min-h-[75vh] max-w-[500px] flex-col items-center justify-center lg:max-w-screen-sm">
         {selectedPick.length <= 0 ? (
           <div className="relative mx-auto my-28 h-80 w-[270px] bg-bg-triangle bg-contain bg-center bg-no-repeat sm:w-[320px]">
             <button
@@ -146,10 +152,15 @@ function App() {
           </div>
         )}
 
-        <button className="mb-4 mt-auto flex h-12 w-32 items-center justify-center rounded-md border-2 border-white lg:ml-auto">
+        <button
+          onClick={handleRulesModal}
+          className="mb-4 mt-auto flex h-12 w-32 items-center justify-center rounded-md border-2 border-white lg:ml-auto"
+        >
           RULES
         </button>
       </main>
+
+      {isRulesOpen && <Rules handleRulesModal={handleRulesModal} />}
     </div>
   );
 }
