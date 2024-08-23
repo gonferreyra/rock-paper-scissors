@@ -49,8 +49,8 @@ function App() {
   }
 
   return (
-    <div className="w-full bg-background-radial-gradient p-6 font-barlow font-semibold uppercase text-white">
-      <header className="flex items-center justify-between rounded-md border-4 border-header-outline p-6">
+    <div className="box-border w-full bg-background-radial-gradient p-6 font-barlow font-semibold uppercase text-white">
+      <header className="flex items-center justify-between rounded-md border-4 border-header-outline p-6 lg:m-auto lg:max-w-screen-sm">
         <div className="">
           <img src="/logo.svg" alt="rockpaperscissors-logo" className="h-16" />
         </div>
@@ -60,7 +60,7 @@ function App() {
         </div>
       </header>
 
-      <main className="relative mx-auto flex min-h-[80vh] max-w-[500px] flex-col items-center justify-center px-6">
+      <main className="relative mx-auto flex min-h-[80vh] max-w-[500px] flex-col items-center justify-center lg:max-w-screen-sm">
         {selectedPick.length <= 0 ? (
           <div className="relative mx-auto my-28 h-80 w-[270px] bg-bg-triangle bg-contain bg-center bg-no-repeat sm:w-[320px]">
             <button
@@ -86,11 +86,11 @@ function App() {
             </button>
           </div>
         ) : (
-          <div className="relative mx-auto my-28 flex w-[270px] flex-row justify-between">
-            <div className="flex flex-col items-center gap-6">
+          <div className="relative mx-auto my-28 flex w-[270px] flex-row justify-between lg:w-[580px] lg:gap-12">
+            <div className="flex flex-col items-center gap-6 lg:flex-col-reverse">
               <div
                 className={clsx(
-                  'flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white',
+                  'flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white lg:h-36 lg:w-36',
                   {
                     'shadow-blue': selectedPick === 'paper',
                     'shadow-yellow': selectedPick === 'scissors',
@@ -100,13 +100,23 @@ function App() {
               >
                 <img src={`/icon-${selectedPick}.svg`} />
               </div>
-              <p className="text-xs">You picked</p>
+              <p className="text-xs lg:text-lg">Your pick</p>
             </div>
+
+            {results && (
+              <div className="mb-6 mt-12 hidden w-[65%] flex-col items-center lg:flex">
+                <p className="text-4xl font-bold">{results}</p>
+                <button className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark">
+                  Play Again
+                </button>
+              </div>
+            )}
+
             {showComputerPick ? (
-              <div className="flex flex-col items-center gap-6">
+              <div className="flex flex-col items-center gap-6 lg:flex-col-reverse">
                 <div
                   className={clsx(
-                    'flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white',
+                    'flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white lg:h-36 lg:w-36',
                     {
                       'shadow-blue': computerPick === 'paper',
                       'shadow-yellow': computerPick === 'scissors',
@@ -116,19 +126,19 @@ function App() {
                 >
                   <img src={`/icon-${computerPick}.svg`} />
                 </div>
-                <p className="text-xs">The house picked</p>
+                <p className="text-xs lg:text-lg">house pick</p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-6">
                 <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-background-radial-gradient" />
-                <p className="text-xs">The house picked</p>
+                <p className="text-xs">house pick</p>
               </div>
             )}
           </div>
         )}
 
         {results && (
-          <div className="mt-12 flex w-[65%] flex-col items-center">
+          <div className="mb-6 mt-12 flex w-[65%] flex-col items-center lg:hidden">
             <p className="text-4xl font-bold">{results}</p>
             <button className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark">
               Play Again
@@ -136,7 +146,7 @@ function App() {
           </div>
         )}
 
-        <button className="mb-4 mt-auto flex h-12 w-32 items-center justify-center rounded-md border-2 border-white">
+        <button className="mb-4 mt-auto flex h-12 w-32 items-center justify-center rounded-md border-2 border-white lg:ml-auto">
           RULES
         </button>
       </main>
