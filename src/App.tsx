@@ -1,12 +1,12 @@
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Rules from './components/Rules';
+import { useLocalStorage } from './lib/hooks';
 
 const choices = ['rock', 'paper', 'scissors'];
 
 function App() {
-  // const scoreFromLocalStorage =
-  //   JSON.parse(localStorage.getItem('score') as string) || 0;
+  const [score, setScore] = useLocalStorage('score', 0);
   const [selectedPick, setSelectedPick] = useState<string>('');
   const [computerPick, setComputerPick] = useState<string>('');
   const [results, setResults] = useState<
@@ -14,17 +14,6 @@ function App() {
   >(null);
   const [showComputerPick, setShowComputerPick] = useState<boolean>(false);
   const [isRulesOpen, setIsRulesOpen] = useState(false);
-  const [score, setScore] = useState<number>(
-    () => JSON.parse(localStorage.getItem('score') as string) || 0,
-  );
-
-  function handleSelectedPick(pick: string) {
-    setSelectedPick(pick);
-  }
-
-  function handleComputerPick() {
-    setComputerPick(choices[Math.floor(Math.random() * choices.length)]);
-  }
 
   function handleRulesModal() {
     setIsRulesOpen(!isRulesOpen);
@@ -62,10 +51,6 @@ function App() {
       }, 1000); // compare results timeout
     }, 1000); // show computers pick timeout
   }
-
-  useEffect(() => {
-    localStorage.setItem('score', JSON.stringify(score));
-  }, [score]);
 
   return (
     <div className="box-border min-h-screen w-full bg-background-radial-gradient p-6 font-barlow font-semibold uppercase text-white">
