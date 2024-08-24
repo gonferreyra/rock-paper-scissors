@@ -1,15 +1,22 @@
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Rules from './components/Rules';
 
 const choices = ['rock', 'paper', 'scissors'];
 
 function App() {
+  // const scoreFromLocalStorage =
+  //   JSON.parse(localStorage.getItem('score') as string) || 0;
   const [selectedPick, setSelectedPick] = useState<string>('');
   const [computerPick, setComputerPick] = useState<string>('');
-  const [results, setResults] = useState<'You win!' | 'You lose!' | 'Tie'>();
+  const [results, setResults] = useState<
+    'You win!' | 'You lose!' | 'Tie' | null
+  >(null);
   const [showComputerPick, setShowComputerPick] = useState<boolean>(false);
   const [isRulesOpen, setIsRulesOpen] = useState(false);
+  const [score, setScore] = useState<number>(
+    () => JSON.parse(localStorage.getItem('score') as string) || 0,
+  );
 
   function handleSelectedPick(pick: string) {
     setSelectedPick(pick);
@@ -46,13 +53,19 @@ function App() {
           (pick === 'paper' && computerSelection === 'rock')
         ) {
           result = 'You win!';
+          setScore((prev) => prev + 1);
         } else {
           result = 'You lose!';
+          setScore((prev) => prev - 1);
         }
         setResults(result);
       }, 1000); // compare results timeout
     }, 1000); // show computers pick timeout
   }
+
+  useEffect(() => {
+    localStorage.setItem('score', JSON.stringify(score));
+  }, [score]);
 
   return (
     <div className="box-border min-h-screen w-full bg-background-radial-gradient p-6 font-barlow font-semibold uppercase text-white">
@@ -61,8 +74,8 @@ function App() {
           <img src="/logo.svg" alt="rockpaperscissors-logo" className="h-16" />
         </div>
         <div className="flex flex-col items-center justify-center rounded-lg bg-white px-4 py-3">
-          <p className="text-[9px] text-text-score">Score</p>
-          <p className="text-4xl text-text-dark">12</p>
+          <p className="text-[9px] tracking-widest text-text-score">Score</p>
+          <p className="text-4xl tracking-tighter text-text-dark">{score}</p>
         </div>
       </header>
 
@@ -111,8 +124,17 @@ function App() {
 
             {results && (
               <div className="mb-6 mt-12 hidden w-[65%] flex-col items-center lg:flex">
-                <p className="text-4xl font-bold">{results}</p>
-                <button className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark">
+                <p className="text-4xl font-bold lg:text-center">{results}</p>
+                {/* make reusable component */}
+                <button
+                  className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark"
+                  onClick={() => {
+                    setSelectedPick('');
+                    setComputerPick('');
+                    setShowComputerPick(false);
+                    setResults(null);
+                  }}
+                >
                   Play Again
                 </button>
               </div>
@@ -135,9 +157,9 @@ function App() {
                 <p className="text-xs lg:text-lg">house pick</p>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-6">
-                <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-background-radial-gradient" />
-                <p className="text-xs">house pick</p>
+              <div className="flex flex-col items-center gap-6 lg:flex-col-reverse">
+                <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-background-radial-gradient lg:lg:h-36 lg:w-36" />
+                <p className="text-xs lg:text-lg">house pick</p>
               </div>
             )}
           </div>
@@ -146,7 +168,16 @@ function App() {
         {results && (
           <div className="mb-6 mt-12 flex w-[65%] flex-col items-center lg:hidden">
             <p className="text-4xl font-bold">{results}</p>
-            <button className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark">
+            {/* make resusable component with the ither playagain btn */}
+            <button
+              className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark"
+              onClick={() => {
+                setSelectedPick('');
+                setComputerPick('');
+                setShowComputerPick(false);
+                setResults(null);
+              }}
+            >
               Play Again
             </button>
           </div>
@@ -154,7 +185,7 @@ function App() {
 
         <button
           onClick={handleRulesModal}
-          className="mb-4 mt-auto flex h-12 w-32 items-center justify-center rounded-md border-2 border-white lg:ml-auto"
+          className="mb-4 mt-auto flex h-12 w-32 items-center justify-center rounded-md border-2 border-white tracking-widest lg:ml-auto"
         >
           RULES
         </button>
