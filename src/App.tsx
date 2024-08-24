@@ -1,35 +1,39 @@
 import clsx from 'clsx';
-import { useState } from 'react';
+
 import Rules from './components/Rules';
-import { useLocalStorage } from './lib/hooks';
+
+import { useGameContext } from './context/GameContextProvider';
 
 const choices = ['rock', 'paper', 'scissors'];
 
 function App() {
-  const [score, setScore] = useLocalStorage('score', 0);
-  const [selectedPick, setSelectedPick] = useState<string>('');
-  const [computerPick, setComputerPick] = useState<string>('');
-  const [results, setResults] = useState<
-    'You win!' | 'You lose!' | 'Tie' | null
-  >(null);
-  const [showComputerPick, setShowComputerPick] = useState<boolean>(false);
-  const [isRulesOpen, setIsRulesOpen] = useState(false);
+  const {
+    score,
+    selectedPick,
+    computerPick,
+    results,
+    showComputerPick,
+    isRulesOpen,
+    handleScore,
+    handleSelectedPick,
+    handleComputerPick,
+    handleResults,
+    handleShowCumputerPick,
+    handleRulesModal,
+  } = useGameContext();
 
-  function handleRulesModal() {
-    setIsRulesOpen(!isRulesOpen);
-  }
-
-  function startGame(pick: string) {
+  function startGame(pick: 'rock' | 'paper' | 'scissors') {
     // set user choice
-    setSelectedPick(pick);
+    handleSelectedPick(pick);
 
     // set computer choice
-    const computerSelection =
-      choices[Math.floor(Math.random() * choices.length)];
-    setComputerPick(computerSelection);
+    const computerSelection = choices[
+      Math.floor(Math.random() * choices.length)
+    ] as 'rock' | 'paper' | 'scissors';
+    handleComputerPick(computerSelection);
 
     setTimeout(() => {
-      setShowComputerPick(true);
+      handleShowCumputerPick(true);
 
       setTimeout(() => {
         // compare results
@@ -42,12 +46,12 @@ function App() {
           (pick === 'paper' && computerSelection === 'rock')
         ) {
           result = 'You win!';
-          setScore((prev) => prev + 1);
+          handleScore('addition');
         } else {
           result = 'You lose!';
-          setScore((prev) => prev - 1);
+          handleScore('subtraction');
         }
-        setResults(result);
+        handleResults(result);
       }, 1000); // compare results timeout
     }, 1000); // show computers pick timeout
   }
@@ -114,10 +118,10 @@ function App() {
                 <button
                   className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark"
                   onClick={() => {
-                    setSelectedPick('');
-                    setComputerPick('');
-                    setShowComputerPick(false);
-                    setResults(null);
+                    handleSelectedPick('');
+                    handleComputerPick('');
+                    handleShowCumputerPick(false);
+                    handleResults(null);
                   }}
                 >
                   Play Again
@@ -157,10 +161,10 @@ function App() {
             <button
               className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark"
               onClick={() => {
-                setSelectedPick('');
-                setComputerPick('');
-                setShowComputerPick(false);
-                setResults(null);
+                handleSelectedPick('');
+                handleComputerPick('');
+                handleShowCumputerPick(false);
+                handleResults(null);
               }}
             >
               Play Again
