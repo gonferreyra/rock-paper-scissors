@@ -16,7 +16,10 @@ type Store = {
   handleResults: (result: 'You win!' | 'You lose!' | 'Tie' | null) => void;
   handleShowCumputerPick: (boolean: boolean) => void;
   handleRulesModal: () => void;
+  startGame: (pick: 'rock' | 'paper' | 'scissors') => void;
 };
+
+const choices = ['rock', 'paper', 'scissors'];
 
 export const GameContext = createContext<Store | null>(null);
 
@@ -65,6 +68,40 @@ export default function GameContextProvider({
     setIsRulesOpen(!isRulesOpen);
   }
 
+  function startGame(pick: 'rock' | 'paper' | 'scissors') {
+    // set user choice
+    handleSelectedPick(pick);
+
+    // set computer choice
+    const computerSelection = choices[
+      Math.floor(Math.random() * choices.length)
+    ] as 'rock' | 'paper' | 'scissors';
+    handleComputerPick(computerSelection);
+
+    setTimeout(() => {
+      handleShowCumputerPick(true);
+
+      setTimeout(() => {
+        // compare results
+        let result: 'You win!' | 'You lose!' | 'Tie' | null = null;
+        if (pick === computerSelection) {
+          result = 'Tie';
+        } else if (
+          (pick === 'rock' && computerSelection === 'scissors') ||
+          (pick === 'scissors' && computerSelection === 'paper') ||
+          (pick === 'paper' && computerSelection === 'rock')
+        ) {
+          result = 'You win!';
+          handleScore('addition');
+        } else {
+          result = 'You lose!';
+          handleScore('subtraction');
+        }
+        handleResults(result);
+      }, 1000); // compare results timeout
+    }, 1000); // show computers pick timeout
+  }
+
   return (
     <GameContext.Provider
       value={{
@@ -80,6 +117,7 @@ export default function GameContextProvider({
         handleResults,
         handleShowCumputerPick,
         handleRulesModal,
+        startGame,
       }}
     >
       {children}

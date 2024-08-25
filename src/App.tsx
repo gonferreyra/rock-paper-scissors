@@ -2,8 +2,6 @@ import clsx from 'clsx';
 import { useGameContext } from './context/GameContextProvider';
 import Rules from './components/Rules';
 
-const choices = ['rock', 'paper', 'scissors'];
-
 function App() {
   const {
     score,
@@ -12,47 +10,13 @@ function App() {
     results,
     showComputerPick,
     isRulesOpen,
-    handleScore,
     handleSelectedPick,
     handleComputerPick,
     handleResults,
     handleShowCumputerPick,
     handleRulesModal,
+    startGame,
   } = useGameContext();
-
-  function startGame(pick: 'rock' | 'paper' | 'scissors') {
-    // set user choice
-    handleSelectedPick(pick);
-
-    // set computer choice
-    const computerSelection = choices[
-      Math.floor(Math.random() * choices.length)
-    ] as 'rock' | 'paper' | 'scissors';
-    handleComputerPick(computerSelection);
-
-    setTimeout(() => {
-      handleShowCumputerPick(true);
-
-      setTimeout(() => {
-        // compare results
-        let result: 'You win!' | 'You lose!' | 'Tie' | null = null;
-        if (pick === computerSelection) {
-          result = 'Tie';
-        } else if (
-          (pick === 'rock' && computerSelection === 'scissors') ||
-          (pick === 'scissors' && computerSelection === 'paper') ||
-          (pick === 'paper' && computerSelection === 'rock')
-        ) {
-          result = 'You win!';
-          handleScore('addition');
-        } else {
-          result = 'You lose!';
-          handleScore('subtraction');
-        }
-        handleResults(result);
-      }, 1000); // compare results timeout
-    }, 1000); // show computers pick timeout
-  }
 
   return (
     <div className="box-border min-h-screen w-full bg-background-radial-gradient p-6 font-barlow font-semibold uppercase text-white">
