@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useState } from 'react';
 import { useLocalStorage } from '../lib/hooks';
 
 type Store = {
@@ -123,12 +123,4 @@ export default function GameContextProvider({
       {children}
     </GameContext.Provider>
   );
-}
-
-export function useGameContext() {
-  const context = useContext(GameContext);
-  if (!context) {
-    throw new Error('useGameContext must be used within a GameContextProvider');
-  }
-  return context;
 }

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { useGameContext } from './context/GameContextProvider';
 import Rules from './components/Rules';
+import { useGameContext } from './lib/hooks';
 
 function App() {
   const {
