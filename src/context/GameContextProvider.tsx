@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import { useLocalStorage } from '../lib/hooks';
 
 type Store = {
@@ -14,7 +14,7 @@ type Store = {
     computerSelection: 'rock' | 'paper' | 'scissors' | '',
   ) => void;
   handleResults: (result: 'You win!' | 'You lose!' | 'Tie' | null) => void;
-  handleShowCumputerPick: (boolean: boolean) => void;
+  handleShowComputerPick: (boolean: boolean) => void;
   handleRulesModal: () => void;
   startGame: (pick: 'rock' | 'paper' | 'scissors') => void;
 };
@@ -38,37 +38,44 @@ export default function GameContextProvider({
   const [isRulesOpen, setIsRulesOpen] = useState(false);
 
   // handlers
-  function handleScore(type: 'addition' | 'subtraction') {
+  const handleScore = useCallback((type: 'addition' | 'subtraction') => {
     if (type === 'addition') {
       setScore((prev) => prev + 1);
     } else {
       setScore((prev) => prev - 1);
     }
-  }
+  }, []);
 
-  function handleSelectedPick(pick: 'rock' | 'paper' | 'scissors' | '') {
-    setSelectedPick(pick);
-  }
+  const handleSelectedPick = useCallback(
+    (pick: 'rock' | 'paper' | 'scissors' | '') => {
+      setSelectedPick(pick);
+    },
+    [],
+  );
 
-  function handleComputerPick(
-    computerSelection: 'rock' | 'paper' | 'scissors' | '',
-  ) {
-    setComputerPick(computerSelection);
-  }
+  const handleComputerPick = useCallback(
+    (computerSelection: 'rock' | 'paper' | 'scissors' | '') => {
+      setComputerPick(computerSelection);
+    },
+    [],
+  );
 
-  function handleResults(result: 'You win!' | 'You lose!' | 'Tie' | null) {
-    setResults(result);
-  }
+  const handleResults = useCallback(
+    (result: 'You win!' | 'You lose!' | 'Tie' | null) => {
+      setResults(result);
+    },
+    [],
+  );
 
-  function handleShowCumputerPick(boolean: boolean) {
+  const handleShowComputerPick = useCallback((boolean: boolean) => {
     setShowComputerPick(boolean);
-  }
+  }, []);
 
-  function handleRulesModal() {
-    setIsRulesOpen(!isRulesOpen);
-  }
+  const handleRulesModal = useCallback(() => {
+    setIsRulesOpen((prev) => !prev);
+  }, []);
 
-  function startGame(pick: 'rock' | 'paper' | 'scissors') {
+  const startGame = useCallback((pick: 'rock' | 'paper' | 'scissors') => {
     // set user choice
     handleSelectedPick(pick);
 
@@ -79,7 +86,7 @@ export default function GameContextProvider({
     handleComputerPick(computerSelection);
 
     setTimeout(() => {
-      handleShowCumputerPick(true);
+      handleShowComputerPick(true);
 
       setTimeout(() => {
         // compare results
@@ -100,7 +107,7 @@ export default function GameContextProvider({
         handleResults(result);
       }, 1000); // compare results timeout
     }, 1000); // show computers pick timeout
-  }
+  }, []);
 
   return (
     <GameContext.Provider
@@ -115,7 +122,7 @@ export default function GameContextProvider({
         handleSelectedPick,
         handleComputerPick,
         handleResults,
-        handleShowCumputerPick,
+        handleShowComputerPick,
         handleRulesModal,
         startGame,
       }}
