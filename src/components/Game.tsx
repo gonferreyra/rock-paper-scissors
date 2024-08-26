@@ -13,7 +13,7 @@ export default function Game() {
     startGame,
   } = useGameContext();
   return (
-    <main className="relative mx-auto flex min-h-[75vh] max-w-[500px] flex-col items-center justify-between lg:max-w-screen-md">
+    <main className="relative mx-auto flex min-h-[75vh] max-w-[500px] flex-col items-center justify-between lg:max-w-screen-md xl:max-w-screen-lg">
       {selectedPick.length <= 0 ? (
         <div className="relative mx-auto mb-8 mt-28 h-80 w-[270px] bg-bg-triangle bg-contain bg-center bg-no-repeat sm:w-[400px]">
           <button
