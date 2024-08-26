@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useGameContext } from '../lib/hooks';
+import Results from './Results';
 
 export default function Game() {
   const {
@@ -7,10 +8,6 @@ export default function Game() {
     computerPick,
     results,
     showComputerPick,
-    handleSelectedPick,
-    handleComputerPick,
-    handleResults,
-    handleShowComputerPick,
     handleRulesModal,
     startGame,
   } = useGameContext();
@@ -58,23 +55,7 @@ export default function Game() {
             <p className="text-xs lg:text-lg">Your pick</p>
           </div>
 
-          {results && (
-            <div className="mb-6 mt-12 hidden w-[65%] flex-col items-center lg:flex">
-              <p className="text-4xl font-bold lg:text-center">{results}</p>
-              {/* make reusable component */}
-              <button
-                className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark transition hover:text-red-500"
-                onClick={() => {
-                  handleSelectedPick('');
-                  handleComputerPick('');
-                  handleShowComputerPick(false);
-                  handleResults(null);
-                }}
-              >
-                Play Again
-              </button>
-            </div>
-          )}
+          {results && <Results screen="small" />}
 
           {showComputerPick ? (
             <div className="flex flex-col items-center gap-6 lg:flex-col-reverse">
@@ -101,23 +82,7 @@ export default function Game() {
         </div>
       )}
 
-      {results && (
-        <div className="mb-6 mt-12 flex w-[65%] flex-col items-center lg:hidden">
-          <p className="text-4xl font-bold">{results}</p>
-          {/* make resusable component with the ither playagain btn */}
-          <button
-            className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-white text-sm uppercase text-text-dark transition hover:text-red-500"
-            onClick={() => {
-              handleSelectedPick('');
-              handleComputerPick('');
-              handleShowComputerPick(false);
-              handleResults(null);
-            }}
-          >
-            Play Again
-          </button>
-        </div>
-      )}
+      {results && <Results screen="large" />}
 
       <button
         onClick={handleRulesModal}
