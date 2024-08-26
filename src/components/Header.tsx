@@ -4,7 +4,7 @@ export default function Header() {
   const { score } = useGameContext();
 
   return (
-    <header className="flex items-center justify-between rounded-md border-4 border-header-outline p-6 lg:m-auto lg:max-w-screen-sm">
+    <header className="flex items-center justify-between rounded-md border-4 border-header-outline p-4 lg:m-auto lg:max-w-screen-sm xl:p-6">
       <div className="">
         <img src="/logo.svg" alt="rockpaperscissors-logo" className="h-16" />
       </div>
