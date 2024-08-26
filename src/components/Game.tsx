@@ -1,6 +1,7 @@
-import clsx from 'clsx';
 import { useGameContext } from '../lib/hooks';
 import Results from './Results';
+import Pick from './Pick';
+import { BounceLoader } from 'react-spinners';
 
 export default function Game() {
   const {
@@ -40,18 +41,7 @@ export default function Game() {
       ) : (
         <div className="relative mx-auto mb-8 mt-28 flex w-[270px] flex-row justify-between md:w-[400px] lg:w-[580px] lg:gap-12">
           <div className="flex flex-col items-center gap-6 lg:flex-col-reverse">
-            <div
-              className={clsx(
-                'flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white md:h-32 md:w-32',
-                {
-                  'shadow-blue': selectedPick === 'paper',
-                  'shadow-yellow': selectedPick === 'scissors',
-                  'shadow-red': selectedPick === 'rock',
-                },
-              )}
-            >
-              <img src={`/icon-${selectedPick}.svg`} />
-            </div>
+            <Pick pick={selectedPick} />
             <p className="text-xs lg:text-lg">Your pick</p>
           </div>
 
@@ -59,23 +49,14 @@ export default function Game() {
 
           {showComputerPick ? (
             <div className="flex flex-col items-center gap-6 lg:flex-col-reverse">
-              <div
-                className={clsx(
-                  'flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white md:h-32 md:w-32',
-                  {
-                    'shadow-blue': computerPick === 'paper',
-                    'shadow-yellow': computerPick === 'scissors',
-                    'shadow-red': computerPick === 'rock',
-                  },
-                )}
-              >
-                <img src={`/icon-${computerPick}.svg`} />
-              </div>
+              <Pick pick={computerPick} />
               <p className="text-xs lg:text-lg">house pick</p>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-6 lg:flex-col-reverse">
-              <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-background-radial-gradient md:h-32 md:w-32" />
+              <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-background-radial-gradient md:h-32 md:w-32">
+                <BounceLoader size={100} />
+              </div>
               <p className="text-xs lg:text-lg">house pick</p>
             </div>
           )}
