@@ -1,7 +1,8 @@
-import { useGameContext } from '../lib/hooks';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 export default function Header() {
-  const { score } = useGameContext();
+  const score = useSelector((state: RootState) => state.game.score);
 
   return (
     <header className="flex items-center justify-between rounded-md border-4 border-header-outline p-4 lg:m-auto lg:max-w-screen-sm xl:max-w-screen-lg xl:p-6">

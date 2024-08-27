@@ -1,20 +1,70 @@
-import { useGameContext } from '../lib/hooks';
 import Results from './Results';
 import Pick from './Pick';
 import { BounceLoader } from 'react-spinners';
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setComputerPick,
+  setResults,
+  setRulesModal,
+  setScore,
+  setSelectedPick,
+  setShowComputerPick,
+} from '../store/GameSlice/gameSlice';
+import { sleep } from '../lib/utils';
+import { AppDispatch, RootState } from '../store/store';
+
+const choices = ['rock', 'paper', 'scissors'];
 
 export default function Game() {
-  const {
-    selectedPick,
-    computerPick,
-    results,
-    showComputerPick,
-    handleRulesModal,
-    startGame,
-  } = useGameContext();
+  const selectedPick = useSelector(
+    (state: RootState) => state.game.selectedPick,
+  );
+  const computerPick = useSelector(
+    (state: RootState) => state.game.computerPick,
+  );
+  const showComputerPick = useSelector(
+    (state: RootState) => state.game.showComputerPick,
+  );
+  const results = useSelector((state: RootState) => state.game.results);
+  const dispatch: AppDispatch = useDispatch();
+
+  const startGame = useCallback(async (pick: 'rock' | 'paper' | 'scissors') => {
+    // set user choice
+    dispatch(setSelectedPick(pick));
+
+    // set computer choice
+    const computerSelection = choices[
+      Math.floor(Math.random() * choices.length)
+    ] as 'rock' | 'paper' | 'scissors';
+    dispatch(setComputerPick(computerSelection));
+
+    // sleeper function
+    await sleep(1000);
+    dispatch(setShowComputerPick(true));
+
+    await sleep(1000);
+    // compare results
+    let result: 'You win!' | 'You lose!' | 'Tie' | null = null;
+    if (pick === computerSelection) {
+      result = 'Tie';
+    } else if (
+      (pick === 'rock' && computerSelection === 'scissors') ||
+      (pick === 'scissors' && computerSelection === 'paper') ||
+      (pick === 'paper' && computerSelection === 'rock')
+    ) {
+      result = 'You win!';
+      dispatch(setScore('addition'));
+    } else {
+      result = 'You lose!';
+      dispatch(setScore('subtraction'));
+    }
+    dispatch(setResults(result));
+  }, []);
+
   return (
     <main className="relative mx-auto flex min-h-[75vh] max-w-[500px] flex-col items-center justify-between lg:max-w-screen-md xl:max-w-screen-lg">
-      {selectedPick.length <= 0 ? (
+      {selectedPick !== null && selectedPick.length <= 0 ? (
         <div className="relative mx-auto mb-8 mt-28 h-80 w-[270px] bg-bg-triangle bg-contain bg-center bg-no-repeat sm:w-[400px]">
           <button
             id="paper"
@@ -66,7 +116,7 @@ export default function Game() {
       {results && <Results screen="large" />}
 
       <button
-        onClick={handleRulesModal}
+        onClick={() => dispatch(setRulesModal())}
         className="mb-4 mt-auto flex h-12 w-32 items-center justify-center rounded-md border-2 border-white tracking-widest transition hover:scale-105 focus:scale-105 lg:ml-auto"
       >
         RULES
