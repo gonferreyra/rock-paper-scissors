@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 type PickProps = {
-  pick: string;
+  pick: string | null;
 };
 
 export default function Pick({ pick }: PickProps) {
