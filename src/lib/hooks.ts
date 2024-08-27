@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
-import { GameContext } from '../context/GameContextProvider';
+import { useEffect, useState } from 'react';
 
 export function useLocalStorage<T>(
   key: string,
@@ -14,12 +13,4 @@ export function useLocalStorage<T>(
   }, [value, key]);
 
   return [value, setValue];
-}
-
-export function useGameContext() {
-  const context = useContext(GameContext);
-  if (!context) {
-    throw new Error('useGameContext must be used within a GameContextProvider');
-  }
-  return context;
 }
