@@ -62,7 +62,7 @@ Users should be able to:
 
 ### State
 
-Global state is managed with ContextApi (v1). Redux (v2) and Zustand (v3). The 3 versions are managed in different branches, with version 1 being the main branch. The idea of ​​managing the states in 3 different ways is to practice how each one is managed
+Global state is managed with ContextApi (v1), Redux (v2) and Zustand (v3). The 3 versions are managed in different branches, using the latest version (Zustand) in the main. The idea of ​​managing the states in 3 different ways is to practice how each one is managed
 
 ## Author
 

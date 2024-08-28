@@ -1,14 +1,13 @@
 import clsx from 'clsx';
 import PlayAgainBtn from './PlayAgainBtn';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { useGameStore } from '../store/gameStore';
 
 type ResultsProps = {
   screen: 'small' | 'large';
 };
 
 export default function Results({ screen }: ResultsProps) {
-  const results = useSelector((state: RootState) => state.game.results);
+  const results = useGameStore((state) => state.results);
   return (
     <div
       className={clsx('mb-6 mt-12 w-[65%] flex-col items-center lg:flex', {

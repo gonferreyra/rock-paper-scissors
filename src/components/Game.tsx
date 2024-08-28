@@ -2,46 +2,38 @@ import Results from './Results';
 import Pick from './Pick';
 import { BounceLoader } from 'react-spinners';
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  setComputerPick,
-  setResults,
-  setRulesModal,
-  setScore,
-  setSelectedPick,
-  setShowComputerPick,
-} from '../store/GameSlice/gameSlice';
 import { sleep } from '../lib/utils';
-import { AppDispatch, RootState } from '../store/store';
+import { useGameStore } from '../store/gameStore';
 
 const choices = ['rock', 'paper', 'scissors'];
 
 export default function Game() {
-  const selectedPick = useSelector(
-    (state: RootState) => state.game.selectedPick,
+  const selectedPick = useGameStore((state) => state.selectedPick);
+  const computerPick = useGameStore((state) => state.computerPick);
+  const showComputerPick = useGameStore((state) => state.showComputerPick);
+  const results = useGameStore((state) => state.results);
+  const setSelectedPick = useGameStore((state) => state.setSelectedPick);
+  const setComputerPick = useGameStore((state) => state.setComputerPick);
+  const setShowComputerPick = useGameStore(
+    (state) => state.setShowComputerPick,
   );
-  const computerPick = useSelector(
-    (state: RootState) => state.game.computerPick,
-  );
-  const showComputerPick = useSelector(
-    (state: RootState) => state.game.showComputerPick,
-  );
-  const results = useSelector((state: RootState) => state.game.results);
-  const dispatch: AppDispatch = useDispatch();
+  const setScore = useGameStore((state) => state.setScore);
+  const setResults = useGameStore((state) => state.setResults);
+  const setRulesModal = useGameStore((state) => state.setRulesModal);
 
   const startGame = useCallback(async (pick: 'rock' | 'paper' | 'scissors') => {
     // set user choice
-    dispatch(setSelectedPick(pick));
+    setSelectedPick(pick);
 
     // set computer choice
     const computerSelection = choices[
       Math.floor(Math.random() * choices.length)
     ] as 'rock' | 'paper' | 'scissors';
-    dispatch(setComputerPick(computerSelection));
+    setComputerPick(computerSelection);
 
     // sleeper function
     await sleep(1000);
-    dispatch(setShowComputerPick(true));
+    setShowComputerPick(true);
 
     await sleep(1000);
     // compare results
@@ -54,12 +46,12 @@ export default function Game() {
       (pick === 'paper' && computerSelection === 'rock')
     ) {
       result = 'You win!';
-      dispatch(setScore('addition'));
+      setScore('addition');
     } else {
       result = 'You lose!';
-      dispatch(setScore('subtraction'));
+      setScore('subtraction');
     }
-    dispatch(setResults(result));
+    setResults(result);
   }, []);
 
   return (
@@ -116,7 +108,7 @@ export default function Game() {
       {results && <Results screen="large" />}
 
       <button
-        onClick={() => dispatch(setRulesModal())}
+        onClick={() => setRulesModal()}
         className="mb-4 mt-auto flex h-12 w-32 items-center justify-center rounded-md border-2 border-white tracking-widest transition hover:scale-105 focus:scale-105 lg:ml-auto"
       >
         RULES
