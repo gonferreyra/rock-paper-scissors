@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 type GameState = {
   score: number;
@@ -18,49 +18,54 @@ type GameState = {
 
 export const useGameStore = create<GameState>()(
   devtools(
-    (set) => ({
-      score: 0,
-      selectedPick: '',
-      computerPick: '',
-      results: '',
-      showComputerPick: false,
-      isRulesOpen: false,
-      setScore: (action) => {
-        if (action === 'addition') {
+    persist(
+      (set) => ({
+        score: 0,
+        selectedPick: '',
+        computerPick: '',
+        results: '',
+        showComputerPick: false,
+        isRulesOpen: false,
+        setScore: (action) => {
+          if (action === 'addition') {
+            set((state) => ({
+              ...state,
+              score: state.score + 1,
+            }));
+          } else {
+            set((state) => ({
+              ...state,
+              score: state.score - 1,
+            }));
+          }
+        },
+        setSelectedPick: (pick) => {
           set((state) => ({
             ...state,
-            score: state.score + 1,
+            selectedPick: pick,
           }));
-        } else {
+        },
+        setComputerPick: (pick) => {
           set((state) => ({
             ...state,
-            score: state.score - 1,
+            computerPick: pick,
           }));
-        }
+        },
+        setResults: (results) => {
+          set((state) => ({
+            ...state,
+            results: results,
+          }));
+        },
+        setShowComputerPick: (boolean) =>
+          set((state) => ({ ...state, showComputerPick: boolean })),
+        setRulesModal: () =>
+          set((state) => ({ ...state, isRulesOpen: !state.isRulesOpen })),
+      }),
+      {
+        name: 'game-storage',
+        partialize: (state) => ({ score: state.score }), // only persiste state of 'score'
       },
-      setSelectedPick: (pick) => {
-        set((state) => ({
-          ...state,
-          selectedPick: pick,
-        }));
-      },
-      setComputerPick: (pick) => {
-        set((state) => ({
-          ...state,
-          computerPick: pick,
-        }));
-      },
-      setResults: (results) => {
-        set((state) => ({
-          ...state,
-          results: results,
-        }));
-      },
-      setShowComputerPick: (boolean) =>
-        set((state) => ({ ...state, showComputerPick: boolean })),
-      setRulesModal: () =>
-        set((state) => ({ ...state, isRulesOpen: !state.isRulesOpen })),
-    }),
-    { name: 'game' },
+    ),
   ),
 );
